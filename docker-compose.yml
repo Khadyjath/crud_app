@@ -1,0 +1,39 @@
+#version: "3.9"
+
+services:
+  app:
+    image: crud_app-app:latest
+    container_name: crud_app
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      APP_ENV: production
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: laravel_db
+      DB_USERNAME: root
+      DB_PASSWORD: azerty
+
+  db:
+    image: mysql:8.0
+    container_name: crud_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: laravel_db
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: azerty
+      MYSQL_ROOT_PASSWORD: azerty
+    volumes:
+      - dbdata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  dbdata:
